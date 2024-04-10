@@ -1,0 +1,72 @@
+spring:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    #show-sql: true
+    #properties:
+    #  hibernate:
+    #    format_sql: true
+    open-in-view: false
+
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/CrazyHarborDB
+    username: postgres
+    password: asd123
+    driverClassName: org.postgresql.Driver
+
+
+
+
+
+  cache:
+    type: REDIS
+  redis:
+    host: localhost
+    port: 6379
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 722473217261-1qpeluka7qs5gr40hjso2css8vc8uffa.apps.googleusercontent.com
+            client-secret: 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
+eureka:
+  client:
+    enabled: true   # "false" -> does not register to eureka server
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+
+#custom
+rabbit-mq:
+  queueName: crazy-harbor-bff-queue do
+  directExchangeProperty: crazy-harbor-bff-dirExchange
+  routingKeyProperty: crazy-harbor-bff-routingKey
+  replyTimeout: 10000
+  receiveTimeout: 10000
+
+logging:
+  file: /Users/cengizhaner/intellijIdeaProjects/crazy-harbor-workspace/crazy-harbor-bff/src/main/resources/elk-stack.log
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+      springframework:
+        security: TRACE  # Enables the see security filters
+    #hibernate:
+
+    #  orm:
+    #    jdbc:
+    #      bind: trace
+
+cache:
+  config:
+    entryTtl: 60
+    harbor-user:
+      entryTtl: 30
+
+
+

@@ -1,0 +1,28 @@
+#spring:
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: crazy-harbor-bff-route
+#          uri: http://localhost:8080
+#          predicates:
+#            - Path=/v1/** # başında v1 bulununan istek görürsen..
+#          filters:
+#            - PrefixPath=/health # prefix path şu hale getirir /health/v1/**
+#            #- name: AddResponseHeader
+#            #  args:
+#            #    name: X-Powered-By
+#            #    value: Cengizhan Gateway Service
+#            - AddResponseHeader=X-Powered-By,Cengizhan Gateway Service
+
+eureka:
+  client:
+    enabled: true   # "false" -> does not register to eureka server
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled= true

@@ -1,0 +1,25 @@
+#spring
+spring:
+  application:
+    name: crazy-harbor-bff
+
+
+#server
+server:
+  port: 8080
+
+
+#management
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+
+application-properties:
+  name: crazy-harbor-bff

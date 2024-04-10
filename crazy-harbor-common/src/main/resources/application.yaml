@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: crazy-harbor-common
+
+server:
+  port: 8000
+
+management: # actuator configs
+  endpoints:
+    web:
+      exposure:
+        include: '*'    # makes all actuator endpoints accessable.
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+
+

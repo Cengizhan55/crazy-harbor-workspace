@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: crazy-harbor-consumer
+  rabbitmq:
+    host: localhost
+    ports: 5672
+    username: guest
+    password: guest
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: '*'
+    endpoint:
+      health:
+        probes:
+          enabled: true
+        show-details: always
+
+server:
+  port: 8010
+
+#custom
+rabbit-mq:
+  queueName: crazy-harbor-bff-queue
+  directExchangeProperty: crazy-harbor-bff-dirExchange
+  routingKeyProperty: crazy-harbor-bff-routingKey
+  replyTimeout: 10000
+  receiveTimeout: 10000

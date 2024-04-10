@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: crazy-harbor-api-gateway
+
+server:
+  port: 8765
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+
+
