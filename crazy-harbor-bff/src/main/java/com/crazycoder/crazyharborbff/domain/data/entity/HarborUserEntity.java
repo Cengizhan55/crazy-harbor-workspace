@@ -51,7 +51,6 @@ public class HarborUserEntity extends Auditable implements Serializable, UserDet
     @Column(name = "BIRTH_DATE")
     private String birthDate;
 
-
     /**
      * Default fetch types
      * OneToMany: LAZY
