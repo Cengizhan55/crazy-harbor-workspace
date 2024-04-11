@@ -31,8 +31,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 722473217261-1qpeluka7qs5gr40hjso2css8vc8uffa.apps.googleusercontent.com
-            client-secret: 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
+            client-id: DUMY CLIENT ID
+            client-secret: DUMMY CLIENT SECRET
 eureka:
   client:
     enabled: true   # "false" -> does not register to eureka server
