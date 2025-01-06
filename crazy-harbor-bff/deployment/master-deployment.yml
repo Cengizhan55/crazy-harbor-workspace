@@ -1,0 +1,180 @@
+#  kubectl exec -it crazy-harbor-bff-deployment-59fbf8d6df-bbzqq -- /bin/sh
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: crazy-harbor-bff-pv-v2
+  labels:
+    app: crazy-harbor-bff-pod
+    dummykey: dummyvalue
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /tmp/custom-spring-pv-v2
+
+--- # IMPORTANT!! -> when we use pvc usually we also want to use "StatefulSet" object.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: crazy-harbor-bff-pvc
+  labels:
+    app: crazy-harbor-bff-pod
+    dummykey: dummyvalue
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: crazy-harbor-bff-secret-file
+  labels:
+    app: crazy-harbor-bff-pod
+    dummykey: dummyvalue
+#type: Opaque # öğren
+data:
+  SPRING_PROFILES_ACTIVE: live
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crazy-harbor-bff-deployment
+  labels:
+    group: crazy-harbor-group
+spec:
+  selector:
+    matchLabels:
+      app: crazy-harbor-bff-pod
+      dummykey: dummyvalue
+  replicas: 2
+  # number of pod instances we wanted , default is 1
+  template: # pods that should be created as part of this deployment (--image)
+    metadata:
+      labels:
+        app: crazy-harbor-bff-pod
+        dummykey: dummyvalue
+    spec: # we define how this POD should be configured
+      containers:
+        - name: crazy-harbor-bff-container
+          image: cengizhandocker/crazy-harbor-bff:13062024-v9
+          startupProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 90
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            failureThreshold: 25
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 150
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 15
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 150
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 10
+            failureThreshold: 3
+
+          envFrom:
+            - configMapRef:
+                name: crazy-harbor-bff-secret-file
+          volumeMounts:
+            - mountPath: /tmp/custom-spring-pv-v2
+              name: crazy-harbor-bff-pv-v2
+
+      volumes:
+        - name: crazy-harbor-bff-pv-v2
+          persistentVolumeClaim:
+            claimName: crazy-harbor-bff-pvc
+
+
+
+
+
+
+
+
+              #volumeMounts:                                           # list the all i wanted volumes that created on the pod , but now also want to have them in the container also.
+              #  - name: my-postgres-pv
+              #    mountPath: /var/lib/postgresql/data
+              #readOnly: true
+              #- name: my-postgres-config
+              # mountPath: /var/lib/postgresql/custom-config
+              #readOnly: true
+              #- name: postgres-secret
+              #mountPath: /run/secrets/POSTGRES_PASSWORD
+              #readOnly: true
+
+              #volumes:
+              #- name: my-postgres-pv
+              #persistentVolumeClaim:
+              #claimName: my-postgres-pvc
+              #- name: my-postgres-config
+              #configMap:
+              #name: postgres-config-file
+              #- name: postgres-secret
+              #secret:
+              #secretName: postgres-secret-file
+              #   - name: MY_SPECIAL_ENV
+              #     valueFrom:
+              #       configMapKeyRef:
+              #         name: my-data-store-env           # this name is specified in configMap object as other resource
+              #         key: my_folder                    # this name is specified in configMap object as other resource
+              #volumeMounts:
+              #  - name: my-volume-pv
+              #    mountPath: /app/story
+              #livenessProbe:
+              #httpGet:
+              #path: /                                           # can be different(e.g /example - /health - /banana)
+              #port: 8080                                        # exposed container port
+            #httpHeaders:                                     # we can add headers too but no need.
+            #periodSeconds: 20                                   # control frequency -> 20 seconds in this case.
+            #initialDelaySeconds: 60                             # the time that k8 should checks the health for the first time. -> after the 60 second passed from the start, it checks the application.
+        #   env:
+        #     - name: SPRING_PROFILES_ACTIVE  # yaml dosyasını live'dan okumaya başlıyor
+        #       value: 'live'
+        # imagePullPolicy: Always                               # this makes the pull the ":latest" tag image always. Also if you give that always you don't need to add tag end of the image name in the image definition above. (you can also set it to never)
+      #volumes:
+      #  - name: my-volume-pv
+      #    persistentVolumeClaim:
+      #      claimName: my-host-pvc                               # you can find the name in host-pvc .yaml
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: crazy-harbor-bff-service
+  labels:
+    group: crazy-harbor-group
+spec:
+  type: LoadBalancer
+  selector:
+    app: crazy-harbor-bff-pod # key-value pair for labels of pods . we defined this metadata of deployment object.
+  ports:
+    - protocol: 'TCP'
+      port: 8080 # this is service's port . Request -> service -> request -> pod  . . so it is arbitary port number
+      targetPort: 8080 # this is when request comes which port the request will go from service to the pod ! . . so it is NOT arbitary port number. It is containers port number that goes to.
+      nodePort: 31000
+

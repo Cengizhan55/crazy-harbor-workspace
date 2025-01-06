@@ -10,28 +10,28 @@
 
         </Console>
 
-      <!-- <Kafka name="KafkaAppender" topic="garageTest" syncSend="false">
-            <PatternLayout
-                    pattern="%d{dd/MM/yyyy HH:mm:ss} %-5p [%t] [%c{1}] %m%n"/>
-            <Property name="bootstrap.servers">
-                localhost:9092
-            </Property>
-            <Property name="max. block.ms">100</Property>
-            <Property name="acks">0</Property>
-            <Property name="linger.ms">100</Property>
-            <Property name="max.request .size">3000000</Property>
-        </Kafka>
-        <Async name="AsyncKafka" blocking="false" buffersize="1024">
-            <AppenderRef ref="KafkaAppender"/>
-        </Async>-->
+        <!-- <Kafka name="KafkaAppender" topic="garageTest" syncSend="false">
+              <PatternLayout
+                      pattern="%d{dd/MM/yyyy HH:mm:ss} %-5p [%t] [%c{1}] %m%n"/>
+              <Property name="bootstrap.servers">
+                  localhost:9092
+              </Property>
+              <Property name="max. block.ms">100</Property>
+              <Property name="acks">0</Property>
+              <Property name="linger.ms">100</Property>
+              <Property name="max.request .size">3000000</Property>
+          </Kafka>
+          <Async name="AsyncKafka" blocking="false" buffersize="1024">
+              <AppenderRef ref="KafkaAppender"/>
+          </Async>-->
 
     </Appenders>
     <Loggers>
-    <!--    <Logger name="org.apache.kafka" Level="INFO"/> --> <!-- avoid recursive logging -->
+        <!--    <Logger name="org.apache.kafka" Level="INFO"/> --> <!-- avoid recursive logging -->
         <Logger name="com.crazycoder" level="debug"/>
         <Root level="INFO">
             <AppenderRef ref="ConsoleAppender"/>
-          <!--  <AppenderRef ref="AsyncKafka"/> -->
+            <!--  <AppenderRef ref="AsyncKafka"/> -->
         </Root>
     </Loggers>
 </Configuration>
