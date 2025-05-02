@@ -11,13 +11,19 @@ import com.crazycoder.crazyharborbff.domain.service.harboruser.model.HarborUserL
 import com.crazycoder.crazyharborbff.domain.service.harboruser.model.HarborUserRequestDTO;
 import com.crazycoder.crazyharborbff.domain.service.harboruser.model.HarborUserResponseDTO;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/user/v1")
 public class HarborUserController implements BaseController {
+
 
     private final HarborUserServiceImpl userService;
 
@@ -49,7 +55,7 @@ public class HarborUserController implements BaseController {
 
 
         HarborUserRequestDTO userRequestDTO = mapper.toUserRequestDTO(request);
-         String userId = userService.createUser(userRequestDTO);
+        String userId = userService.createUser(userRequestDTO);
 
         return ResponseEntity.ok(userId);
     }

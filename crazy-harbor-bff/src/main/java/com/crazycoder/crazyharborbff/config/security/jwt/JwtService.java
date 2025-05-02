@@ -17,6 +17,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
+
     private static final String SECRET_KEY = "fVFh5F/03W35P+UiJ+Znwnw44uFtRjQBTg5fBO/VsMo="; // TODO -> 256 bit secret
 
 
@@ -77,4 +78,6 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+
 }

@@ -8,13 +8,18 @@ import com.crazycoder.crazyharborbff.controller.authentication.model.JwtRegister
 import com.crazycoder.crazyharborbff.domain.data.entity.HarborUserEntity;
 import com.crazycoder.crazyharborbff.domain.data.enumeration.UserRole;
 import com.crazycoder.crazyharborbff.domain.repository.HarborUserRepository;
+
+import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional(value = Transactional.TxType.REQUIRED)
 public class AuthenticationService {
+
 
     private final HarborUserRepository harborUserRepository;
 
@@ -63,4 +68,6 @@ public class AuthenticationService {
 
         return JwtAuthenticationResponse.builder().token(jwtToken).build();
     }
+
+
 }
