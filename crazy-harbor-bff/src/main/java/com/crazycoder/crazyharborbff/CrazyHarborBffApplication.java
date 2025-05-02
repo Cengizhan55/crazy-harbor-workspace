@@ -11,6 +11,9 @@ import java.util.TreeSet;
 @SpringBootApplication
 
 public class CrazyHarborBffApplication {
+    static {
+        System.out.println("Application starting..  ");
+    }
 
 
     public static void main(String[] args) {

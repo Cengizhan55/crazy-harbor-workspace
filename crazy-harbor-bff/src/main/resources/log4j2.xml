@@ -10,7 +10,7 @@
 
         </Console>
 
-        <!-- <Kafka name="KafkaAppender" topic="garageTest" syncSend="false">
+         <Kafka name="KafkaAppender" topic="garageTest" syncSend="false">
               <PatternLayout
                       pattern="%d{dd/MM/yyyy HH:mm:ss} %-5p [%t] [%c{1}] %m%n"/>
               <Property name="bootstrap.servers">
@@ -23,15 +23,15 @@
           </Kafka>
           <Async name="AsyncKafka" blocking="false" buffersize="1024">
               <AppenderRef ref="KafkaAppender"/>
-          </Async>-->
+          </Async>
 
     </Appenders>
     <Loggers>
-        <!--    <Logger name="org.apache.kafka" Level="INFO"/> --> <!-- avoid recursive logging -->
+       <Logger name="org.apache.kafka" Level="DEBUG"/> --> <!-- avoid recursive logging -->
         <Logger name="com.crazycoder" level="debug"/>
         <Root level="INFO">
             <AppenderRef ref="ConsoleAppender"/>
-            <!--  <AppenderRef ref="AsyncKafka"/> -->
+            <AppenderRef ref="AsyncKafka"/>
         </Root>
     </Loggers>
 </Configuration>

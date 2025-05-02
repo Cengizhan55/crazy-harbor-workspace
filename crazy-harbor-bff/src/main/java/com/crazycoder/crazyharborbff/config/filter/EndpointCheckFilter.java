@@ -12,6 +12,9 @@ import java.util.Objects;
 
 @Slf4j
 public class EndpointCheckFilter extends OncePerRequestFilter {
+
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
