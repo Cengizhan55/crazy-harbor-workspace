@@ -11,9 +11,11 @@
     <groupId>com.crazycoder</groupId>
     <artifactId>crazy-harbor-bff</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>crazy-harbor-bff</name>
+    <packaging>jar</packaging>
+    <name>crazy-harbor-bff</name> <!-- it does not have functional features. It can be seen in maven reports etc. nothing special -->
     <description>Demo project for Spring Boot</description>
-    <properties>
+    <url> www.example.com</url>    <!-- The <url> element specifies the project homepage URL.  -->
+    <properties>             <!-- With the properties we can override versions of parent pom.xml  ! -->
         <java.version>17</java.version>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
@@ -21,27 +23,18 @@
         <version.mapstruct>1.4.2.Final</version.mapstruct>
         <version.mapstruct-lombok>0.2.0</version.mapstruct-lombok>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
-
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
+
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
             <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
+
             </exclusions>
         </dependency>
 
@@ -49,18 +42,19 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
+
             </exclusions>
         </dependency>
 
-        <!-- we change logback with the log4j2 -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
+
+
+        <!-- we change logback with the log4j2 -->
+
 
         <dependency>
             <groupId>org.apache.kafka</groupId>
@@ -68,11 +62,7 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
+                    <artifactId>slf4j-reload4j</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -82,6 +72,7 @@
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
+
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -99,11 +90,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+
         <!-- additional dependencies-->
 
         <!-- https://mvnrepository.com/artifact/org.mapstruct/mapstruct -->
@@ -113,9 +100,15 @@
             <version>1.5.3.Final</version>
         </dependency>
 
+        <!--
         <dependency>
             <groupId>org.springframework.amqp</groupId>
             <artifactId>spring-rabbit</artifactId>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -128,16 +121,15 @@
             <version>4.1.72.Final</version>
             <classifier>osx-aarch_64</classifier>
         </dependency>
+
+        <!--
         <dependency>
             <groupId>com.crazycoder</groupId>
             <artifactId>crazy-harbor-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-            <exclusions>
-
-            </exclusions>
 
         </dependency>
+        -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -170,20 +162,40 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+
+        <!-- for  prometheus actuator endpoint /actuator/prometheus -->
+
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <scope>runtime</scope>
         </dependency>
+        <!-- for  prometheus actuator endpoint /actuator/prometheus -->
+
+        <!-- for  logging -->
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-sleuth-core -->
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-sleuth -->
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-sleuth -->
+        <!--
+         <dependency>
+             <groupId>org.springframework.cloud</groupId>
+             <artifactId>spring-cloud-starter-sleuth</artifactId>
+             <version>2.2.6.RELEASE</version>
+         </dependency> -->
+
+
+        <!-- for  logging -->
 
 
     </dependencies>
 
-    <dependencyManagement>
+    <dependencyManagement>             <!-- with the dependency management we can arrange own custom version despite of the choosen version via parent -->
         <dependencies>
             <!-- Spring Cloud Dependencies -->
             <dependency>
@@ -216,6 +228,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
+                   <!-- <outputDirectory>target/classes/banana/strawberry</outputDirectory>     This tells Maven to place compiled .class files in the target/classes directory.    -->
+                    <!-- <sourceDirectory>src/main/java</sourceDirectory>    This tells Maven to look for source files in the src/main/java directory. -->
+
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
                     <!-- Maven only uses the MapStruct processor and not the Lombok one. The annotationProcessorPaths tells maven which processors it should use. -->
@@ -241,9 +256,6 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.10</version>
-                <configuration>
-                    <useFile>false</useFile>
-                </configuration>
             </plugin>
         </plugins>
     </build>

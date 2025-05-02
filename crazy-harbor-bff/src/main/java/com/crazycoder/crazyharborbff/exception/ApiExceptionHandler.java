@@ -1,7 +1,7 @@
 package com.crazycoder.crazyharborbff.exception;
 
 
-import com.crazycoder.crazyharborcommon.exception.GlobalExceptionModel;
+import com.crazycoder.crazyharborbff.exception.GlobalExceptionModel;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;

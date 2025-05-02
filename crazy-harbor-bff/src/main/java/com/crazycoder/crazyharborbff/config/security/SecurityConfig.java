@@ -3,6 +3,13 @@ package com.crazycoder.crazyharborbff.config.security;
 import com.crazycoder.crazyharborbff.config.security.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,6 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 
 /**
  * we used to WebSecurityConfigurerAdapter but with the spring 3.0 , we don't.
@@ -33,22 +41,33 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
                 .csrf().disable()
-
-                .authorizeHttpRequests().requestMatchers("/auth/v1/**").permitAll()
-                .anyRequest().permitAll() // todo -> change this in production .anyRequest().authenticated()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests().requestMatchers(unAuthorizedRequestPatterns()).permitAll()
+                .anyRequest().permitAll();// todo -> change this in production .anyRequest().authenticated()
+        //.and()
+        // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        //  .and()
+        //   .authenticationProvider(authenticationProvider)
+        //    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
+
+    private String[] unAuthorizedRequestPatterns() {
+        return new String[]{
+                "/auth/v1/**", "/metrics/**", "/actuator/**"
+        };
+    }
+
+
+
 
 
 

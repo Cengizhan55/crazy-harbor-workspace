@@ -1,6 +1,8 @@
 package com.crazycoder.crazyharborbff.controller.health;
 
 
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
@@ -16,8 +18,11 @@ public class HealthController {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public HealthController(JdbcTemplate jdbcTemplate) {
+    private final RedisTemplate redisTemplate;
+
+    public HealthController(JdbcTemplate jdbcTemplate, RedisTemplate redisTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
     @GetMapping("/application")
@@ -35,4 +40,10 @@ public class HealthController {
         return ResponseEntity.ok("Database is not running.");
     }
 
+    @GetMapping("/redis")
+    public String checkDatabaseHealth1() {
+        ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
+        String userCount = (String) valueOperations.get("user_count");
+        return "usercount is " + userCount;
+    }
 }

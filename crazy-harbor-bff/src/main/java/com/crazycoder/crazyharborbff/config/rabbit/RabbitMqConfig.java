@@ -54,7 +54,7 @@ public class RabbitMqConfig {
     }
 
     @Bean
-    RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
                                   AmqpAdmin amqpAdmin,
                                   DirectExchange directExchange,
                                   Binding binding,

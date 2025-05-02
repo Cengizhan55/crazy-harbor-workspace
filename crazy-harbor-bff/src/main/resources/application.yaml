@@ -1,13 +1,9 @@
-#spring
 spring:
   application:
     name: crazy-harbor-bff
 
-
-#server
 server:
   port: 8080
-
 
 #management
 management:
@@ -21,5 +17,19 @@ management:
         enabled: true
       show-details: always
 
-application-properties:
-  name: crazy-harbor-bff
+#logging:
+#  level:
+#    org:
+#      hibernate:
+      #  SQL: DEBUG
+     # springframework:
+     #   security: TRACE  # Enables the see security filters
+    #hibernate:
+
+    #  orm:
+    #    jdbc:
+    #      bind: trace
+
+
+
+

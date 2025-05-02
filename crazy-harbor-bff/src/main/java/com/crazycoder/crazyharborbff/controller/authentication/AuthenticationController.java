@@ -6,11 +6,15 @@ import com.crazycoder.crazyharborbff.controller.authentication.model.JwtAuthenti
 import com.crazycoder.crazyharborbff.controller.authentication.model.JwtRegisterRequest;
 import com.crazycoder.crazyharborbff.domain.service.authentication.AuthenticationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth/v1")
 public class AuthenticationController {
+
 
     private final AuthenticationService authenticationService;
 
@@ -53,8 +57,8 @@ public class AuthenticationController {
 
 
 
+/*
 
-    /*
     private final AuthenticationManager authenticationManager;
     private final HarborUserRepository harborUserRepository;
     private final HarborUserRoleRepository harborUserRoleRepository;
@@ -99,5 +103,7 @@ public class AuthenticationController {
 
     }
 
-     */
+ */
+
+
 }
