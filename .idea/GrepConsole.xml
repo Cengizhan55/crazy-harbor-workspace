@@ -8,6 +8,9 @@
             <TailItem>
               <option name="path" value="$PROJECT_DIR$/prometheus-config/Dockerfile" />
             </TailItem>
+            <TailItem>
+              <option name="path" value="$PROJECT_DIR$/crazy-harbor-bff/deployment/master-deployment.yml" />
+            </TailItem>
           </set>
         </option>
       </TailHistory>
