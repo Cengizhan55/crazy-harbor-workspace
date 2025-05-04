@@ -10,10 +10,23 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 
+/**
+ * @Before: Method devreye girmeden önce çalışır.
+ * @AfterReturning: Method başarılı sonuçlandıktan sonra çalışır.
+ * @AfterThrowing: Methodun exception dönmesi durumunda çalışır.
+ * @After: Returning ve Throwing her iki durumdada çalışır. (finally)
+ * @Around: Method devreye girmeden önce ve metod bittikten sonra çalışır.
+ *
+ *
+ * target: Metodumuzun çalışması hedeflenen beani ifade eder.
+ * execution: Metodumuzun çalışacağı bölge belirtilir.
+ * @annotation: Hedef anotasyon dahilinde çalışacağı anlamına gelir.
+ */
 @Aspect
 @Slf4j
 @Component
 public class TransactionAudit {
+
 
     // todo: getmapping does not work
     private final String generalControllerPointCut = "((within(*..controller..*) && (@annotation(org.springframework.web.bind.annotation.PostMapping) ||"

@@ -1,0 +1,51 @@
+#spring
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    #show-sql: true
+    #properties:
+    #  hibernate:
+    #    format_sql: true
+    open-in-view: false
+
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://postgres-service:5432/CrazyHarborDB
+    username: postgres
+    password: asd123
+    driverClassName: org.postgresql.Driver
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+  cache:
+    type: REDIS
+  data: # data.redis for docker-compose run
+    redis:
+      host: redis
+      port: 6379
+
+eureka:
+  client:
+    enabled: true   # "false" -> does not register to eureka server
+    serviceUrl:
+      defaultZone: http://crazy-harbor-eureka-server:8761/eureka/
+
+
+rabbit-mq:
+  queueName: crazy-harbor-bff-queue
+  directExchangeProperty: crazy-harbor-bff-dirExchange
+  routingKeyProperty: crazy-harbor-bff-routingKey
+  replyTimeout: 10000
+  receiveTimeout: 10000
+
+
+
+cache:
+  config:
+    entryTtl: 60
+    harbor-user:
+      entryTtl: 30

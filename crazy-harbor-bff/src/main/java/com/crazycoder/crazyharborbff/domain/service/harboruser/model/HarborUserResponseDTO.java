@@ -1,6 +1,5 @@
 package com.crazycoder.crazyharborbff.domain.service.harboruser.model;
 
-import com.crazycoder.crazyharborbff.controller.harboruser.model.HarborUserRoleDTO;
 import com.crazycoder.crazyharborbff.domain.data.enumeration.UserRole;
 import lombok.Getter;
 import lombok.Setter;

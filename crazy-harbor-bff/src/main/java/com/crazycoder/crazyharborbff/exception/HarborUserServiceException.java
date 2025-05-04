@@ -1,9 +1,7 @@
 package com.crazycoder.crazyharborbff.exception;
 
 
-import com.crazycoder.crazyharborcommon.exception.BaseException;
-
-public class HarborUserServiceException extends BaseException {
+public class HarborUserServiceException extends RuntimeException {
 
     private final String serviceName;
 
