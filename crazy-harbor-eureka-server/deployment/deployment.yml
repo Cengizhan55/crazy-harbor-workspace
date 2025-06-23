@@ -1,0 +1,70 @@
+# start ->  kubectl apply -f=master-deployment.yaml
+# delete -> kubectl delete -f=master-deployment.yaml
+# kubectl port-forward service/hello-minikube 8000:8090 bunu kullandım bişe bozulrusa bundan dolayı
+
+# kubectl apply -f=deployment.yml
+# kubectl delete -f=deployment.yml
+# kubectl delete -f=deployment.yml -f=service.yml _>>> for deleting it is easier
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crazy-harbor-eureka-deployment
+  labels:
+    group: crazy-harbor-group
+spec:
+  selector:
+    matchLabels:
+      app: crazy-harbor-eureka-pod
+      dummykey: dummyvalue
+  replicas: 1               # number of pod instances we wanted , defult is 1
+  template:                 # pods that should be created as part of this deployment (--image)
+    metadata:
+      labels:
+        app: crazy-harbor-eureka-pod
+        dummykey: dummyvalue
+    spec:                 # we define how this POD should be configured
+      containers:
+        - name: crazy-harbor-eureka-container
+          image: cengizhandocker/crazy-harbor-eureka-server
+          env:
+            - name: MY_SPECIAL_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: my-data-store-env           # this name is specified in configMap object as other resource
+                  key: my_folder                    # this name is specified in configMap object as other resource
+          volumeMounts:
+            - name: my-volume-pv
+              mountPath: /app/story
+          livenessProbe:
+            httpGet:
+              path: /                                           # can be different(e.g /example - /health - /banana)
+              port: 8765                                        # exposed container port
+              httpHeaders:                                     # we can add headers too but no need.
+            periodSeconds: 20                                   # control frequency -> 20 seconds in this case.
+            initialDelaySeconds: 60                             # the time that k8 should checks the health for the first time. -> after the 60 second passed from the start, it checks the application.
+          imagePullPolicy: Always                               # this makes the pull the ":latest" tag image always. Also if you give that always you don't need to add tag end of the image name in the image definition above. (you can also set it to never)
+      volumes:
+        - name: my-volume-pv
+          persistentVolumeClaim:
+            claimName: my-host-pvc                               # you can find the name in host-pvc .yaml
+
+
+# Volumes:
+#   hostPath amd EmptyDir volumes has an disadvantage -> this volumes are destroyed when a pod is removed or restarted or for emptyDir -> pod number is increased for example 1 pod to 3 pod.
+#   In minikube cluster we have only one worker node ! this is critical when working with volumes in minikube. hostPath solution when working with multiple nodes won't work also.
+#   When working with databases this emptyDir and hostPath would be useless. Because database will be need pod or node independent storage. For that case we have concept "Persisten Volumes" in kubernetes.
+#
+
+
+
+
+# kubectl apply -f=deployment.yml
+# kubectl delete -f=deployment.yml
+# kubectl delete -f=deployment.yml -f=service.yml _>>> for deleting it is easier
+# kubectl delete deployments,services -l group=example -> for deleting with label
+
+
+# /* lets assume you have named auth-service pod. and this pod cluster-internal(not exposed to outside world). Then if you wanna by-pass ip of the auth-service to the other pods then for this case -> ${process.env.AUTH_SERVICE_SERVICE_HOST}
+#continued -> if you had named users-service then ip would be  ${process.env.USERS_SERVICE_SERVICE_HOST}
