@@ -2,7 +2,7 @@ spring:
   application:
     name: crazy-harbor-consumer
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     ports: 5672
     username: guest
     password: guest
