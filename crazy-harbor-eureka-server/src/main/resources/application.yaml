@@ -1,6 +1,6 @@
 spring:
   application:
-    name: APPLICATION.FORUM.forum-eureka-server
+    name: crazy-harbor-eureka-server
 
 
 server:
@@ -16,3 +16,13 @@ management:
       probes:
         enabled: true
       show-details: always
+
+eureka:
+  client:
+    registerWithEureka: false # "false" -> it prevents the register itself to the eureka server.
+    fetchRegistry: false # "false" -> it prevents reaching register documents of itself.
+
+
+## debug: true # it shows autoconfigured beans in the console
+
+
