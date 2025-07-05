@@ -1,6 +1,0 @@
-eureka:
-  client:
-    registerWithEureka: false # "false" -> it prevents the register itself to the eureka server.
-    fetchRegistry: false # "false" -> it prevents reaching register documents of itself.
-
-
