@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-data-store-env
+data:                                     # instead of spec we use data here.
+  my_folder: 'my_key'                     # here is simple key-value pairs.
+
