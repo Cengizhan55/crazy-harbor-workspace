@@ -1,0 +1,19 @@
+apiVersion: v1                                            # same as the service
+kind: PersistentVolume
+metadata:
+  name: my-host-pv                                        # it is up to us. We can name anything we want
+spec:
+  capacity:
+    storage: 1Gi                                          # 1 Gigabyte
+  volumeMode: Filesystem                                  # there is 2 available modes here 1) FileSystem 2) Block
+  storageClassName: standart                              # "standart"is the minikube automatic given named for minikube-hostpath
+  accessModes:                                            # you can define multiple access modes. 3
+    - ReadWriteOnce                                       # this volume can be mounted read-write volume by a single node, so by multiple pods but all have to be on same node. hostPath is given in this example and hostPath only available in this ReadWriteOnce case(minikube is one node working cluster, in real life multiple nodes will be.).
+  #    - ReadOnlyMany                                       # it is read-only but can be claimed by multiple nodes. So different pods in different nodes can claim this same volume.For example hostPath cannot use this option because hostPath works healthy only in one node!.
+  #    - ReadWriteMany                                      # it is same with the "ReadOnlyMany" with read-write access diference.
+  hostPath:                                               # which type of volume we want
+    path: /data
+    type: DirectoryOrCreate
+
+
+# https://kubernetes.io/docs/concepts/storage/persistent-volumes/
