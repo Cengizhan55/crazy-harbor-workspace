@@ -1,0 +1,100 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: "postgres:12"
+    platform: linux/arm64
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - crazy-harbor-custom-network
+
+  rabbitmq:
+    platform: linux/arm64
+    image: 'rabbitmq:3-management'
+    container_name: rabbitmq
+    hostname: 'rabbitmq'
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - crazy-harbor-custom-network
+    #healthcheck:
+    #  test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
+    #  interval: 30s
+    #  timeout: 10s
+    #  retries: 5
+
+  redis-server:
+    hostname: redis
+    image: 'redis'
+    ports:
+      - "6379:6379"
+    networks:
+      - crazy-harbor-custom-network
+    env_file:
+      - ./crazy-harbor-application.env
+
+  crazy-harbor-eureka-server:
+    build: "./crazy-harbor-eureka-server"
+    depends_on:
+      - rabbitmq
+    ports:
+      - "8761:8761"
+    networks:
+      - crazy-harbor-custom-network
+    env_file:
+      - ./crazy-harbor-application.env
+
+
+    #crazy-harbor-api-gateway:
+    #build: "./crazy-harbor-api-gateway"
+      #depends_on:
+      #- crazy-harbor-eureka-server
+      #ports:
+      #- "8765:8765"
+      #networks:
+      #- crazy-harbor-custom-network
+
+
+    #crazy-harbor-common:
+    #build: "./crazy-harbor-common"
+      #ports:
+      #- "8000:8000"
+      #depends_on:
+      #- crazy-harbor-api-gateway
+      #networks:
+      #- crazy-harbor-custom-network
+
+  crazy-harbor-bff:
+    build: "./crazy-harbor-bff"
+    depends_on:
+      - rabbitmq
+      - crazy-harbor-eureka-server
+      - redis-server
+      - postgres
+    env_file:
+      - ./crazy-harbor-application.env
+    ports:
+      - "8080:8080"
+    networks:
+      - crazy-harbor-custom-network
+
+#  crazy-harbor-consumer:
+#    build: "./crazy-harbor-consumer"
+#    depends_on:
+#      - crazy-harbor-bff
+#    ports:
+#      - "8010:8010"
+
+
+networks:
+  crazy-harbor-custom-network:
+
+volumes:
+  postgres-data: # you need to add here too. when we use in postgres service, we should add named volumes here too.// different containers can use same volume(can be shared volume) also postgresVolume is not a specific docker keyword. Anynomous and bind mounts cannot be specified in here!!!
