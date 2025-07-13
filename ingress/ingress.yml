@@ -1,5 +1,3 @@
-
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -7,18 +5,19 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  defaultBackend: crazy-harbor-ui-service
-  ingressClassName: nginx-example
   rules:
-    - http:
+    - host: cengizhaner.example.com
+      http:
         paths:
-          - path: /
-            pathType: Prefix
+          - pathType: Prefix
+            path: "/"
             backend:
               service:
                 name: crazy-harbor-ui-service
                 port:
                   number: 3000
+
+
 
 #apiVersion: networking.k8s.io/v1
 #kind: Ingress
