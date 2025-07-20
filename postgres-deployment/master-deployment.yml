@@ -1,0 +1,157 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: my-postgres-pv
+  labels:
+    app: postgres-pod
+    dummykey: dummyvalue
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /data/postgresql
+
+--- # IMPORTANT!! -> when we use pvc usually we also want to use "StatefulSet" object.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-postgres-pvc
+  labels:
+    app: postgres-pod
+    dummykey: dummyvalue
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-secret-file
+  labels:
+    app: postgres-pod
+    dummykey: dummyvalue
+#type: Opaque # öğren
+data:
+  POSTGRES_DB: CrazyHarborDB
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: asd123
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+  labels:
+    group: crazy-harbor-group
+spec:
+  selector:
+    matchLabels:
+      app: postgres-pod
+      dummykey: dummyvalue
+  replicas: 1
+  # number of pod instances we wanted , defult is 1
+  template: # pods that should be created as part of this deployment (--image)
+    metadata:
+      labels:
+        app: postgres-pod
+        dummykey: dummyvalue
+    spec: # we define how this POD should be configured
+      hostname: postgres
+      containers:
+        - name: postgres
+          image: postgres:12
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: postgres-secret-file
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: my-postgres-pv
+
+      volumes:
+        - name: my-postgres-pv
+          persistentVolumeClaim:
+            claimName: my-postgres-pvc
+      readinessProbe:
+        exec:
+          command: [ "psql", "-w", "-U",$POSTGRES_USER, "-d", $POSTGRES_DB, "-c", "SELECT 1" ]
+        initialDelaySeconds: 15
+        timeoutSeconds: 2
+      livenessProbe:
+        exec:
+          command: [ "psql", "-w", "-U",$POSTGRES_USER, "-d",$POSTGRES_DB, "-c", "SELECT 1" ]
+        initialDelaySeconds: 45
+        timeoutSeconds: 2
+
+          #env:
+          #  - name: POSTGRES_DB
+          #    value: CrazyHarborDB
+          #  - name: POSTGRES_PASSWORD
+          #    value: asd123
+          #  - name: POSTGRES_USER
+          #    value: postgres
+
+
+          # env:
+          #   - name: MY_SPECIAL_ENV
+          #     valueFrom:
+          #       configMapKeyRef:
+          #         name: my-data-store-env           # this name is specified in configMap object as other resource
+          #         key: my_folder                    # this name is specified in configMap object as other resource
+          #volumeMounts:
+          #  - name: my-volume-pv
+          #    mountPath: /app/story
+          #livenessProbe:
+          #  httpGet:
+          #    path: /                                           # can be different(e.g /example - /health - /banana)
+          #    port: 5432                                        # exposed container port
+          #    httpHeaders:                                     # we can add headers too but no need.
+          #  periodSeconds: 20                                   # control frequency -> 20 seconds in this case.
+        #  initialDelaySeconds: 60                             # the time that k8 should checks the health for the first time. -> after the 60 second passed from the start, it checks the application.
+        # imagePullPolicy: Always                               # this makes the pull the ":latest" tag image always. Also if you give that always you don't need to add tag end of the image name in the image definition above. (you can also set it to never)
+      #volumes:
+      #  - name: my-volume-pv
+      #    persistentVolumeClaim:
+      #      claimName: my-host-pvc                               # you can find the name in host-pvc .yaml
+
+---
+
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: postgres-service
+#  labels:
+#    group: crazy-harbor-group
+#spec:
+#  selector:
+#    app: postgres-pod
+#  ports:
+#    - protocol: 'TCP'
+#      port: 5432
+#      targetPort: 5432
+#  type: LoadBalancer
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  labels:
+    group: crazy-harbor-group
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+      #nodePort: 30005
+  selector:
+    app: postgres-pod
+---
