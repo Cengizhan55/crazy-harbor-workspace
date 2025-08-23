@@ -3,11 +3,11 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/crazy-harbor-common/pom.xml" />
         <option value="$PROJECT_DIR$/crazy-harbor-api-gateway/pom.xml" />
         <option value="$PROJECT_DIR$/crazy-harbor-eureka-server/pom.xml" />
-        <option value="$PROJECT_DIR$/crazy-harbor-consumer/pom.xml" />
+        <option value="$PROJECT_DIR$/crazy-harbor-common/pom.xml" />
         <option value="$PROJECT_DIR$/crazy-harbor-bff/pom.xml" />
+        <option value="$PROJECT_DIR$/crazy-harbor-consumer/pom.xml" />
       </list>
     </option>
   </component>
