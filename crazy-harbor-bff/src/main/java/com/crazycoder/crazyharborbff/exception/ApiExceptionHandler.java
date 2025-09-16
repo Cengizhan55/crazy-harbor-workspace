@@ -57,4 +57,6 @@ public class ApiExceptionHandler {
         );
         return new ResponseEntity<>(globalExceptionModel, httpStatus);
     }
+
+
 }

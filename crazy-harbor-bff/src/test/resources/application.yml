@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: crazy-harbor-bff
+
+server:
+  port: 8080
+
+#management
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+
+      #logging:
+      #  level:
+      #    org:
+      #      hibernate:
+      #  SQL: DEBUG
+      # springframework:
+      #   security: TRACE  # Enables the see security filters
+    #hibernate:
+
+    #  orm:
+    #    jdbc:
+    #      bind: trace
+
+
+
+
