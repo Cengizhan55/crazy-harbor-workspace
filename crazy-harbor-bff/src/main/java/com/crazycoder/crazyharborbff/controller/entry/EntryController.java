@@ -5,6 +5,7 @@ import com.crazycoder.crazyharborbff.controller.common.BaseController;
 import com.crazycoder.crazyharborbff.controller.entry.model.EntryListResponse;
 import com.crazycoder.crazyharborbff.controller.entry.model.EntryRequest;
 import com.crazycoder.crazyharborbff.domain.service.entry.impl.EntryServiceImpl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -25,19 +26,13 @@ public class EntryController implements BaseController {
     }
 
 
-
-
-
     @PostMapping
     public boolean saveEntry(@RequestBody EntryRequest request) {
 
+        entryService.saveEntry(request.getText());
 
-        try {
-            entryService.saveEntry(request.getText());
-        } catch (Exception e) {
-            return false;
-        }
         return true;
+
     }
 
     @GetMapping
@@ -51,4 +46,14 @@ public class EntryController implements BaseController {
 
         return allEntries;
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<Boolean> updateEntity(@RequestBody EntryRequest request) {
+
+        entryService.updateEntry(request);
+
+        return ResponseEntity.ok(true);
+
+    }
+
 }
