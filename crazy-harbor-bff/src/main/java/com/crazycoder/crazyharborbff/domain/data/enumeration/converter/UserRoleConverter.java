@@ -3,15 +3,20 @@ package com.crazycoder.crazyharborbff.domain.data.enumeration.converter;
 import com.crazycoder.crazyharborbff.domain.data.enumeration.UserRole;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import org.apache.commons.lang.StringUtils;
+//import org.apache.commons.lang.StringUtils;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.stream.Stream;
 
+
+public class UserRoleConverter {
+}
 /**
  * this class is deprecated, it was converter for harborUserRole.
- */
+ */ // todo: will be refactored
+
+/*
 @Converter(autoApply = true)
 public class UserRoleConverter implements AttributeConverter<UserRole, String>, Serializable {
 
@@ -38,3 +43,5 @@ public class UserRoleConverter implements AttributeConverter<UserRole, String>, 
                 .orElseThrow(IllegalArgumentException::new);
     }
 }
+
+ */
